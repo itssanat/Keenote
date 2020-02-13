@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:keenote/screens/note_detail.dart';
 
 class NoteList extends StatefulWidget {
   @override
@@ -20,7 +21,8 @@ class NoteListState extends State<NoteList> {
       body: getNoteListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          debugPrint('button pressed');
+          debugPrint('FAB pressed');
+          navigateToDetail('Add note');
         },
         child: Icon(Icons.add),
       ),
@@ -49,10 +51,18 @@ class NoteListState extends State<NoteList> {
             trailing: Icon(Icons.delete),
             onTap: () {
               debugPrint('list tapped');
+              navigateToDetail('Edit note');
             },
           ),
         );
       },
     );
   }
+  
+  void navigateToDetail(String title){
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return NoteDetail(title);
+    }));
+  }
+  
 }

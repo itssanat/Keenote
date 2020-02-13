@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 
 class NoteDetail extends StatefulWidget {
+  
+  String appBarTitle;
+  NoteDetail(String title){
+    this.appBarTitle = title;
+  }
+  
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return NoteDetailState();
+    return NoteDetailState(this.appBarTitle);
   }
 }
 
 class NoteDetailState extends State<NoteDetail> {
   static var _priorities = ['High', 'Low'];
-
+  String appBarTitle;
+  
+  NoteDetailState(String title){
+    appBarTitle = title;
+  }
+  
   @override
   Widget build(BuildContext context) {
     
@@ -19,9 +30,19 @@ class NoteDetailState extends State<NoteDetail> {
     TextEditingController titleController = TextEditingController();
     TextEditingController descriptionController = TextEditingController();
     
-    return Scaffold(
+    return WillPopScope (
+      onWillPop: (){
+        moveToLastScreen();
+      },
+      child: Scaffold(
       appBar: AppBar(
-        title: Text('Add note'),
+        title: Text(appBarTitle),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            moveToLastScreen();
+          },
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
@@ -70,7 +91,7 @@ class NoteDetailState extends State<NoteDetail> {
             Padding(
               padding: EdgeInsets.only( top: 15.0 , bottom: 15.0),
               child: TextField(
-                controller: titleController,
+                controller: descriptionController,
                 style: titleStyle,
                 onTap: (){
                   debugPrint("list has been in description");
@@ -90,7 +111,39 @@ class NoteDetailState extends State<NoteDetail> {
               padding: EdgeInsets.only(top: 15.0 , bottom: 15.0),
               child: Row(
                 children: <Widget>[
+                  Expanded(
+                    child: RaisedButton(
+                      color: Theme.of(context).primaryColorDark,
+                      textColor: Theme.of(context).primaryColorLight,
+                      child: Text(
+                        'Save' ,
+                        textScaleFactor: 1.5,
+                      ),
+                      onPressed: (){
+                        setState(() {
+                          debugPrint('Save button clicked');
+                        });
+                      },
+                    ),
+                  ),
                   
+                  Container(width: 5.0,),
+                  
+                  Expanded(
+                    child: RaisedButton(
+                      color: Theme.of(context).primaryColorDark,
+                      textColor: Theme.of(context).primaryColorLight,
+                      child: Text(
+                        'Delete' ,
+                        textScaleFactor: 1.5,
+                      ),
+                      onPressed: (){
+                        setState(() {
+                          debugPrint('Delete button clicked');
+                        });
+                      },
+                    ),
+                  )
                 ],
               ),
             )
@@ -98,6 +151,11 @@ class NoteDetailState extends State<NoteDetail> {
           ],
         ),
       ),
-    );
+    ));
+  }
+  
+  
+  void moveToLastScreen(){
+    Navigator.pop(context);
   }
 }
